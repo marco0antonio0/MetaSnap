@@ -1,32 +1,20 @@
-# Usa a imagem oficial do Node.js
-FROM node:18-alpine AS builder
+# Base image
+FROM node:18
 
-# Define o diretório de trabalho dentro do container
-WORKDIR /app
+# Create app directory
+WORKDIR /usr/src/app
 
-# Copia os arquivos de dependência
-COPY package.json package-lock.json ./ 
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json ./
 
-# Instala as dependências
+# Install app dependencies
 RUN npm install --force
 
-# Copia os arquivos do projeto para dentro do container
+# Bundle app source
 COPY . .
 
-# Constrói a aplicação Next.js
+# Creates a "dist" folder with the production build
 RUN npm run build
 
-# Segunda etapa para um container mais leve
-FROM node:18-alpine
-
-# Define o diretório de trabalho
-WORKDIR /app
-
-# Copia os arquivos construídos da primeira etapa
-COPY --from=builder /app .
-
-# Expõe a porta utilizada pelo Next.js
-EXPOSE 3000
-
-# Comando para rodar a aplicação
-CMD ["npm", "start"]
+# Start the server using the production build
+CMD [ "node", "dist/main.js" ]
