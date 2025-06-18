@@ -11,7 +11,7 @@ interface CacheEntry {
 @Injectable()
 export class ScreenshotService {
   private cache = new Map<string, CacheEntry>();
-  private readonly ttlMs = 24 * 60 * 60 * 1000; // 24 horas
+  private readonly ttlMs = 30 * 24 * 60 * 60 * 1000; // 30*24 horas
 
   async generateScreenshot(url: string, forceRefresh = false): Promise<Buffer> {
     // console.log('[ScreenshotService] Iniciando geração de screenshot...');
