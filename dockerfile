@@ -4,17 +4,42 @@ FROM node:18
 # Create app directory
 WORKDIR /usr/src/app
 
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# Instala bibliotecas do sistema necessárias para Chromium (Puppeteer)
+RUN apt-get update && apt-get install -y \
+  wget \
+  ca-certificates \
+  fonts-liberation \
+  libappindicator3-1 \
+  libasound2 \
+  libatk-bridge2.0-0 \
+  libatk1.0-0 \
+  libcups2 \
+  libdbus-1-3 \
+  libgdk-pixbuf2.0-0 \
+  libnspr4 \
+  libnss3 \
+  libx11-xcb1 \
+  libxcomposite1 \
+  libxdamage1 \
+  libxrandr2 \
+  libxshmfence1 \
+  libgbm1 \
+  xdg-utils \
+  --no-install-recommends && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
+# Copia package.json e package-lock.json
 COPY package*.json ./
 
-# Install app dependencies
+# Instala dependências da aplicação
 RUN npm install --force
 
-# Bundle app source
+# Copia o restante da aplicação
 COPY . .
 
-# Creates a "dist" folder with the production build
+# Compila o projeto (gera a pasta dist)
 RUN npm run build
 
-# Start the server using the production build
-CMD [ "node", "dist/main.js" ]
+# Comando para iniciar o servidor em modo de desenvolvimento
+CMD ["npm", "run", "start"]

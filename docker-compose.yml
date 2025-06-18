@@ -4,23 +4,8 @@ services:
   metasnap_frontend:
     build: .
     container_name: metasnap_frontend
-    expose:
-      - "3000"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.metasnap_frontend.rule=Host(`metasnap.dirrocha.com`)"
-      - "traefik.http.routers.metasnap_frontend.entrypoints=websecure"
-      - "traefik.http.routers.metasnap_frontend.tls=true"
-      - "traefik.http.routers.metasnap_frontend.tls.certresolver=letsEncrypt"
-      - "traefik.http.services.metasnap_frontend.loadbalancer.server.port=3000"
-    networks:
-      - proxy
+    ports:
+      - "3000:3000"
     volumes:
       - ./src:/app/src
     restart: always
-
-
-networks:
-  proxy:
-    external: true
-    name: traefik_proxy
