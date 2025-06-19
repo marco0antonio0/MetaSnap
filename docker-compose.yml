@@ -3,7 +3,7 @@ version: "3.8"
 services:
   metasnap_frontend:
     build: .
-    container_name: metasnap_frontend
+    container_name: metasnap_backend
     expose:
       - "3000"
     labels:
